@@ -2,9 +2,9 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>Image Classifier Project</title>
+<title>Notebook</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=Ov9zmedNOp_XnxuQsxkG7w380BGzqCFpAml48GqZxNggHrMkcKK_NgQ4UySMMjYcDuu7vp0X2c4HfW8kbHd3FoS4UJirSk8PwtGWLgoJWuzMG4CtamTajDJm8qhBnL-oBkzfB9k003pv6vmoOGg6wRDHQIh-CRXp9QFFD4z-ClY" charset="UTF-8"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
@@ -13135,25 +13135,26 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Developing-an-AI-application">Developing an AI application<a class="anchor-link" href="#Developing-an-AI-application">&#182;</a></h1><p>Going forward, AI algorithms will be incorporated into more and more everyday applications. For example, you might want to include an image classifier in a smart phone app. To do this, you'd use a deep learning model trained on hundreds of thousands of images as part of the overall application architecture. A large part of software development in the future will be using these types of models as common parts of applications.</p>
-<p>In this project, you'll train an image classifier to recognize different species of flowers. You can imagine using something like this in a phone app that tells you the name of the flower your camera is looking at. In practice you'd train this classifier, then export it for use in your application. We'll be using <a href="http://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html">this dataset</a> of 102 flower categories, you can see a few examples below.</p>
-<p><img src='assets/Flowers.png' width=500px></p>
-<p>The project is broken down into multiple steps:</p>
+<h1 id="Developing-an-AI-application">Developing an AI application<a class="anchor-link" href="#Developing-an-AI-application">&#182;</a></h1><p>The project is broken down into multiple steps:</p>
 <ul>
 <li>Load and preprocess the image dataset</li>
 <li>Train the image classifier on your dataset</li>
 <li>Use the trained classifier to predict image content</li>
 </ul>
-<p>We'll lead you through each part which you'll implement in Python.</p>
-<p>When you've completed this project, you'll have an application that can be trained on any set of labeled images. Here your network will be learning about flowers and end up as a command line application. But, what you do with your new skills depends on your imagination and effort in building a dataset. For example, imagine an app where you take a picture of a car, it tells you what the make and model is, then looks up information about it. Go build your own dataset and make something new.</p>
-<p>First up is importing the packages you'll need. It's good practice to keep all the imports at the beginning of your code. As you work through this notebook and find you need to import a package, make sure to add the import up here.</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Imports">Imports<a class="anchor-link" href="#Imports">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Imports here</span>
@@ -13172,45 +13173,9 @@ div#notebook {
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">os</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#torch.device</span>
-<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
-<span class="n">device</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[2]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#39;cuda&#39;</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -13218,16 +13183,13 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Load-the-data">Load the data<a class="anchor-link" href="#Load-the-data">&#182;</a></h2><p>Here you'll use <code>torchvision</code> to load the data (<a href="http://pytorch.org/docs/0.3.0/torchvision/index.html">documentation</a>). The data should be included alongside this notebook, otherwise you can <a href="https://s3.amazonaws.com/content.udacity-data.com/nd089/flower_data.tar.gz">download it here</a>. The dataset is split into three parts, training, validation, and testing. For the training, you'll want to apply transformations such as random scaling, cropping, and flipping. This will help the network generalize leading to better performance. You'll also need to make sure the input data is resized to 224x224 pixels as required by the pre-trained networks.</p>
-<p>The validation and testing sets are used to measure the model's performance on data it hasn't seen yet. For this you don't want any scaling or rotation transformations, but you'll need to resize then crop the images to the appropriate size.</p>
-<p>The pre-trained networks you'll use were trained on the ImageNet dataset where each color channel was normalized separately. For all three sets you'll need to normalize the means and standard deviations of the images to what the network expects. For the means, it's <code>[0.485, 0.456, 0.406]</code> and for the standard deviations <code>[0.229, 0.224, 0.225]</code>, calculated from the ImageNet images.  These values will shift each color channel to be centered at 0 and range from -1 to 1.</p>
-
+<h2 id="Load-the-data">Load the data<a class="anchor-link" href="#Load-the-data">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;flowers&#39;</span>
@@ -13243,10 +13205,10 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: Define your transforms for the training, validation, and testing sets</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Defining transforms for the training, validation, and testing sets</span>
 
 <span class="n">train_transforms</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span><span class="n">transforms</span><span class="o">.</span><span class="n">RandomRotation</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span> 
                                        <span class="n">transforms</span><span class="o">.</span><span class="n">RandomResizedCrop</span><span class="p">(</span><span class="mi">224</span><span class="p">),</span>
@@ -13285,17 +13247,17 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Label-mapping">Label mapping<a class="anchor-link" href="#Label-mapping">&#182;</a></h3><p>You'll also need to load in a mapping from category label to category name. You can find this in the file <code>cat_to_name.json</code>. It's a JSON object which you can read in with the <a href="https://docs.python.org/2/library/json.html"><code>json</code> module</a>. This will give you a dictionary mapping the integer encoded categories to the actual names of the flowers.</p>
-
+<h3 id="Label-mapping">Label mapping<a class="anchor-link" href="#Label-mapping">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;cat_to_name.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Load in a mapping from category label to category name from a JSON file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;cat_to_name.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">cat_to_name</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 
@@ -13307,29 +13269,17 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Building-and-training-the-classifier">Building and training the classifier<a class="anchor-link" href="#Building-and-training-the-classifier">&#182;</a></h1><p>Now that the data is ready, it's time to build and train the classifier. As usual, you should use one of the pretrained models from <code>torchvision.models</code> to get the image features. Build and train a new feed-forward classifier using those features.</p>
-<p>We're going to leave this part up to you. Refer to <a href="https://review.udacity.com/#!/rubrics/1663/view">the rubric</a> for guidance on successfully completing this section. Things you'll need to do:</p>
-<ul>
-<li>Load a <a href="http://pytorch.org/docs/master/torchvision/models.html">pre-trained network</a> (If you need a starting point, the VGG networks work great and are straightforward to use)</li>
-<li>Define a new, untrained feed-forward network as a classifier, using ReLU activations and dropout</li>
-<li>Train the classifier layers using backpropagation using the pre-trained network to get the features</li>
-<li>Track the loss and accuracy on the validation set to determine the best hyperparameters</li>
-</ul>
-<p>We've left a cell open for you below, but use as many as you need. Our advice is to break the problem up into smaller parts you can run separately. Check that each part is doing what you expect, then move on to the next. You'll likely find that as you work through each part, you'll need to go back and modify your previous code. This is totally normal!</p>
-<p>When training make sure you're updating only the weights of the feed-forward network. You should be able to get the validation accuracy above 70% if you build everything right. Make sure to try different hyperparameters (learning rate, units in the classifier, epochs, etc) to find the best model. Save those hyperparameters to use as default values in the next part of the project.</p>
-<p>One last important tip if you're using the workspace to run your code: To avoid having your workspace disconnect during the long-running tasks in this notebook, please read in the earlier page in this lesson called Intro to
-GPU Workspaces about Keeping Your Session Active. You'll want to include code from the workspace_utils.py module.</p>
-<p><font color='red'>**Note for Workspace users:** If your network is over 1 GB when saved as a checkpoint, there might be issues with saving backups in your workspace. Typically this happens with wide dense layers after the convolutional layers. If your saved checkpoint is larger than 1 GB (you can open a terminal and check with `ls -lh`), you should reduce the size of your hidden layers and train again.</font></p>
-
+<h1 id="Building-and-training-the-classifier">Building and training the classifier<a class="anchor-link" href="#Building-and-training-the-classifier">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: Build and train your network</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="n">device</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">vgg16</span><span class="p">(</span><span class="n">pretrained</span> <span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -13361,7 +13311,7 @@ GPU Workspaces about Keeping Your Session Active. You'll want to include code fr
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[6]:</div>
+    <div class="prompt output_prompt">Out[&nbsp;]:</div>
 
 
 
@@ -13421,7 +13371,7 @@ GPU Workspaces about Keeping Your Session Active. You'll want to include code fr
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">classifier</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">([(</span><span class="s1">&#39;Layer1&#39;</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">25088</span><span class="p">,</span> <span class="mi">4096</span><span class="p">)),</span>
@@ -13448,7 +13398,7 @@ GPU Workspaces about Keeping Your Session Active. You'll want to include code fr
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[7]:</div>
+    <div class="prompt output_prompt">Out[&nbsp;]:</div>
 
 
 
@@ -13510,7 +13460,7 @@ GPU Workspaces about Keeping Your Session Active. You'll want to include code fr
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
@@ -13526,7 +13476,7 @@ GPU Workspaces about Keeping Your Session Active. You'll want to include code fr
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">validation</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">valLoader</span><span class="p">,</span> <span class="n">criterion</span><span class="p">):</span>
@@ -13536,7 +13486,7 @@ GPU Workspaces about Keeping Your Session Active. You'll want to include code fr
         <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">labels</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
         <span class="n">val_loss</span> <span class="o">+=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
-        
+        <span class="c1">#Probability Distributions</span>
         <span class="n">ps</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
         <span class="n">equality</span> <span class="o">=</span> <span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">ps</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">accuracy</span> <span class="o">+=</span> <span class="n">equality</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -13550,7 +13500,7 @@ GPU Workspaces about Keeping Your Session Active. You'll want to include code fr
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">train_classifier</span><span class="p">():</span>
@@ -13661,7 +13611,7 @@ Epoch: 8/8..  Training Loss: 0.688..  Validation Loss: 0.474..  Validation Accur
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">train_losses</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training loss&#39;</span><span class="p">)</span>
@@ -13679,7 +13629,7 @@ Epoch: 8/8..  Training Loss: 0.688..  Validation Loss: 0.474..  Validation Accur
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[12]:</div>
+    <div class="prompt output_prompt">Out[&nbsp;]:</div>
 
 
 
@@ -13714,18 +13664,16 @@ height=250
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Testing-your-network">Testing your network<a class="anchor-link" href="#Testing-your-network">&#182;</a></h2><p>It's good practice to test your trained network on test data, images the network has never seen either in training or validation. This will give you a good estimate for the model's performance on completely new images. Run the test images through the network and measure the accuracy, the same way you did validation. You should be able to reach around 70% accuracy on the test set if the model has been trained well.</p>
-
+<h2 id="Testing-the-network">Testing the network<a class="anchor-link" href="#Testing-the-network">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: Do validation on the test set</span>
-<span class="k">def</span> <span class="nf">test_accuracy</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test_accuracy</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">):</span>
     <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
     <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     
@@ -13734,6 +13682,7 @@ height=250
         <span class="k">for</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">test_loader</span><span class="p">:</span>
             <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">labels</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
             <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+            <span class="c1">#Probability Distributions</span>
             <span class="n">ps</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
             <span class="n">equality</span> <span class="o">=</span> <span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">ps</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">accuracy</span> <span class="o">+=</span> <span class="n">equality</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -13767,20 +13716,16 @@ height=250
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Save-the-checkpoint">Save the checkpoint<a class="anchor-link" href="#Save-the-checkpoint">&#182;</a></h2><p>Now that your network is trained, save the model so you can load it later for making predictions. You probably want to save other things such as the mapping of classes to indices which you get from one of the image datasets: <code>image_datasets['train'].class_to_idx</code>. You can attach this to the model as an attribute which makes inference easier later on.</p>
-<p><code>model.class_to_idx = image_datasets['train'].class_to_idx</code></p>
-<p>Remember that you'll want to completely rebuild the model later so you can use it for inference. Make sure to include any information you need in the checkpoint. If you want to load the model and keep training, you'll want to save the number of epochs as well as the optimizer state, <code>optimizer.state_dict</code>. You'll likely want to use this trained model in the next part of the project, so best to save it now.</p>
-
+<h2 id="Save-a-checkpoint">Save a checkpoint<a class="anchor-link" href="#Save-a-checkpoint">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: Save the checkpoint </span>
-<span class="k">def</span> <span class="nf">save_checkpoint</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">save_checkpoint</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
     <span class="n">model</span><span class="o">.</span><span class="n">class_to_idx</span> <span class="o">=</span> <span class="n">train_dataset</span><span class="o">.</span><span class="n">class_to_idx</span>
     <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">({</span>
         <span class="s1">&#39;arch&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">arch</span><span class="p">,</span>
@@ -13801,17 +13746,16 @@ height=250
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Loading-the-checkpoint">Loading the checkpoint<a class="anchor-link" href="#Loading-the-checkpoint">&#182;</a></h2><p>At this point it's good to write a function that can load a checkpoint and rebuild the model. That way you can come back to this project and keep working on it without having to retrain the network.</p>
-
+<h2 id="Loading-the-checkpoint">Loading the checkpoint<a class="anchor-link" href="#Loading-the-checkpoint">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: Write a function that loads a checkpoint and rebuilds the model</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># loads a checkpoint and rebuilds the model</span>
 <span class="k">def</span> <span class="nf">load_checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
@@ -13833,7 +13777,7 @@ height=250
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[19]:</div>
+    <div class="prompt output_prompt">Out[&nbsp;]:</div>
 
 
 
@@ -13896,26 +13840,13 @@ height=250
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Inference-for-classification">Inference for classification<a class="anchor-link" href="#Inference-for-classification">&#182;</a></h1><p>Now you'll write a function to use a trained network for inference. That is, you'll pass an image into the network and predict the class of the flower in the image. Write a function called <code>predict</code> that takes an image and a model, then returns the top $K$ most likely classes along with the probabilities. It should look like</p>
-<div class="highlight"><pre><span></span><span class="n">probs</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="p">[</span> <span class="mf">0.01558163</span>  <span class="mf">0.01541934</span>  <span class="mf">0.01452626</span>  <span class="mf">0.01443549</span>  <span class="mf">0.01407339</span><span class="p">]</span>
-<span class="o">&gt;</span> <span class="p">[</span><span class="s1">&#39;70&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;45&#39;</span><span class="p">,</span> <span class="s1">&#39;62&#39;</span><span class="p">,</span> <span class="s1">&#39;55&#39;</span><span class="p">]</span>
-</pre></div>
-<p>First you'll need to handle processing the input image such that it can be used in your network.</p>
-<h2 id="Image-Preprocessing">Image Preprocessing<a class="anchor-link" href="#Image-Preprocessing">&#182;</a></h2><p>You'll want to use <code>PIL</code> to load the image (<a href="https://pillow.readthedocs.io/en/latest/reference/Image.html">documentation</a>). It's best to write a function that preprocesses the image so it can be used as input for the model. This function should process the images in the same manner used for training.</p>
-<p>First, resize the images where the shortest side is 256 pixels, keeping the aspect ratio. This can be done with the <a href="http://pillow.readthedocs.io/en/3.1.x/reference/Image.html#PIL.Image.Image.thumbnail"><code>thumbnail</code></a> or <a href="http://pillow.readthedocs.io/en/3.1.x/reference/Image.html#PIL.Image.Image.thumbnail"><code>resize</code></a> methods. Then you'll need to crop out the center 224x224 portion of the image.</p>
-<p>Color channels of images are typically encoded as integers 0-255, but the model expected floats 0-1. You'll need to convert the values. It's easiest with a Numpy array, which you can get from a PIL image like so <code>np_image = np.array(pil_image)</code>.</p>
-<p>As before, the network expects the images to be normalized in a specific way. For the means, it's <code>[0.485, 0.456, 0.406]</code> and for the standard deviations <code>[0.229, 0.224, 0.225]</code>. You'll want to subtract the means from each color channel, then divide by the standard deviation.</p>
-<p>And finally, PyTorch expects the color channel to be the first dimension but it's the third dimension in the PIL image and Numpy array. You can reorder dimensions using <a href="https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.ndarray.transpose.html"><code>ndarray.transpose</code></a>. The color channel needs to be first and retain the order of the other two dimensions.</p>
-
+<h2 id="Image-Preprocessing">Image Preprocessing<a class="anchor-link" href="#Image-Preprocessing">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[69]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">process_image</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
@@ -13950,8 +13881,6 @@ height=250
     <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     
     <span class="k">return</span> <span class="n">image</span>
-       
-    <span class="c1"># TODO: Process a PIL image for use in a PyTorch model</span>
 </pre></div>
 
     </div>
@@ -13969,11 +13898,10 @@ height=250
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[70]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Imshow for Tensor.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
     
@@ -14002,29 +13930,18 @@ height=250
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Class-Prediction">Class Prediction<a class="anchor-link" href="#Class-Prediction">&#182;</a></h2><p>Once you can get images in the correct format, it's time to write a function for making predictions with your model. A common practice is to predict the top 5 or so (usually called top-$K$) most probable classes. You'll want to calculate the class probabilities then find the $K$ largest values.</p>
-<p>To get the top $K$ largest values in a tensor use <a href="http://pytorch.org/docs/master/torch.html#torch.topk"><code>x.topk(k)</code></a>. This method returns both the highest <code>k</code> probabilities and the indices of those probabilities corresponding to the classes. You need to convert from these indices to the actual class labels using <code>class_to_idx</code> which hopefully you added to the model or from an <code>ImageFolder</code> you used to load the data (<a href="#Save-the-checkpoint">see here</a>). Make sure to invert the dictionary so you get a mapping from index to class as well.</p>
-<p>Again, this method should take a path to an image and a model checkpoint, then return the probabilities and classes.</p>
-<div class="highlight"><pre><span></span><span class="n">probs</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="p">[</span> <span class="mf">0.01558163</span>  <span class="mf">0.01541934</span>  <span class="mf">0.01452626</span>  <span class="mf">0.01443549</span>  <span class="mf">0.01407339</span><span class="p">]</span>
-<span class="o">&gt;</span> <span class="p">[</span><span class="s1">&#39;70&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;45&#39;</span><span class="p">,</span> <span class="s1">&#39;62&#39;</span><span class="p">,</span> <span class="s1">&#39;55&#39;</span><span class="p">]</span>
-</pre></div>
-
+<h2 id="Class-Prediction">Class Prediction<a class="anchor-link" href="#Class-Prediction">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[71]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">topk</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39; Predict the class (or classes) of an image using a trained deep learning model.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    
-    <span class="c1"># TODO: Implement the code to predict the class from an image file</span>
     <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
     
@@ -14057,7 +13974,7 @@ height=250
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[71]:</div>
+    <div class="prompt output_prompt">Out[&nbsp;]:</div>
 
 
 
@@ -14080,29 +13997,13 @@ height=250
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Sanity-Checking">Sanity Checking<a class="anchor-link" href="#Sanity-Checking">&#182;</a></h2><p>Now that you can use a trained model for predictions, check to make sure it makes sense. Even if the testing accuracy is high, it's always good to check that there aren't obvious bugs. Use <code>matplotlib</code> to plot the probabilities for the top 5 classes as a bar graph, along with the input image. It should look like this:</p>
-<p><img src='assets/inference_example.png' width=300px></p>
-<p>You can convert from the class integer encoding to actual flower names with the <code>cat_to_name.json</code> file (should have been loaded earlier in the notebook). To show a PyTorch tensor as an image, use the <code>imshow</code> function defined above.</p>
-
+<h2 id="Sanity-Checking">Sanity Checking<a class="anchor-link" href="#Sanity-Checking">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: Display an image along with the top 5 classes</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[75]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">image_path</span> <span class="o">=</span> <span class="s1">&#39;flowers/test/10/image_07090.jpg&#39;</span>
@@ -14152,125 +14053,6 @@ height=279
 
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><font color='red'><strong>Reminder for Workspace users:</strong> If your network becomes very large when saved as a checkpoint, there might be issues with saving backups in your workspace. You should reduce the size of your hidden layers and train again.</p>
-<p>We strongly encourage you to delete these large interim files and directories before navigating to another page or closing the browser tab.&lt;/font&gt;</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO remove .pth files or move it to a temporary `~/opt` directory in this Workspace</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[77]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;checkpoint.pth&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">alexnet</span><span class="p">(</span><span class="n">pretrained</span> <span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">model</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Downloading: &#34;https://download.pytorch.org/models/alexnet-owt-4df8aa71.pth&#34; to /root/.torch/models/alexnet-owt-4df8aa71.pth
-100%|██████████| 244418560/244418560 [00:02&lt;00:00, 100320410.13it/s]
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[4]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>AlexNet(
-  (features): Sequential(
-    (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
-    (1): ReLU(inplace)
-    (2): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
-    (3): Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
-    (4): ReLU(inplace)
-    (5): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
-    (6): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (7): ReLU(inplace)
-    (8): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (9): ReLU(inplace)
-    (10): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (11): ReLU(inplace)
-    (12): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
-  )
-  (classifier): Sequential(
-    (0): Dropout(p=0.5)
-    (1): Linear(in_features=9216, out_features=4096, bias=True)
-    (2): ReLU(inplace)
-    (3): Dropout(p=0.5)
-    (4): Linear(in_features=4096, out_features=4096, bias=True)
-    (5): ReLU(inplace)
-    (6): Linear(in_features=4096, out_features=1000, bias=True)
-  )
-)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
 </div>
 </div>
 
